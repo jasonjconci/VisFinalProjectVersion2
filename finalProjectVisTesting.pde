@@ -1,5 +1,13 @@
+/*
+* drawMenu function - draws button for all 50 states. When button clicked set current state and launch ...
+* drawState function - which draws detailed state shit based on global variable
+* 
+* Make escape go back to main menu
+*
+*/
 import java.util.*;
 import java.lang.*;
+import g4p_controls.*;
 
 Table originalTable;
 Table totalsTable;
@@ -11,11 +19,20 @@ ArrayList<Float> otherList;
 Map<String, ArrayList<StateAtMonth>> byStateMap;
 ArrayList<String> stateList;
 
+GButton test, test2;
 
 
+void handleButtonEvents (GButton button, GEvent event) {
+   if((button.getText() == "name") && (event == GEvent.CLICKED)){
+       println("Fuck this");
+   }
+   else {
+     println("Nothing");
+   }
+}
 
 void setup(){
-  size(1920,1080);
+  size(100, 100);
   smooth();
   background(#ffffff);
   surface.setResizable(true);
@@ -40,6 +57,9 @@ void setup(){
    handgunList.add(0,handgun);
    longgunList.add(0,longgun);
    otherList.add(0,other);
+   
+   test = new GButton(this, 50, 50, 50, 50, "name");
+   test2 = new GButton(this, 10, 10, 10, 10, "name2");
   }
   
   
@@ -71,8 +91,9 @@ void setup(){
   
 }
 
+
 void draw(){
-  drawByState("California");
+  //drawByState("California");
   
   // Commenting out this bit - I'm guessing, in the future, we'll have a MODE variable, and
   // depending on the value of this variable, we will draw to the screen a different visualization
@@ -93,6 +114,7 @@ void draw(){
     lastXCoordinate = currX;
     lastYCoordinate = currY;
   }*/
+ 
 }
 
 
