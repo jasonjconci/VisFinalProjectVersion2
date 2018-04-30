@@ -19,11 +19,19 @@ ArrayList<Float> otherList;
 Map<String, ArrayList<StateAtMonth>> byStateMap;
 ArrayList<String> stateList;
 
-GButton test, test2;
+GButton[] stateButtons = new GButton[50];
+String[] nameOfStates = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana",
+"Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+"Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+"New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
+"Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+"Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
+"Wyoming"};
+//int[] counter = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
 
 
 void handleButtonEvents (GButton button, GEvent event) {
-   if((button.getText() == "name") && (event == GEvent.CLICKED)){
+   if((button.getText() == "Alabama") && (event == GEvent.CLICKED)){
        println("Fuck this");
    }
    else {
@@ -32,7 +40,7 @@ void handleButtonEvents (GButton button, GEvent event) {
 }
 
 void setup(){
-  size(100, 100);
+  fullScreen();
   smooth();
   background(#ffffff);
   surface.setResizable(true);
@@ -58,11 +66,25 @@ void setup(){
    longgunList.add(0,longgun);
    otherList.add(0,other);
    
-   test = new GButton(this, 50, 50, 50, 50, "name");
-   test2 = new GButton(this, 10, 10, 10, 10, "name2");
-  }
-  
-  
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i] = new GButton(this, 50, 60 + (i*(height/11)), 100, 50, nameOfStates[i]);
+   }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+10] = new GButton(this, 180, 60 + (i*(height/11)), 100, 50, nameOfStates[i+10]);
+   }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+20] = new GButton(this, 310, 60 + (i*(height/11)), 100, 50, nameOfStates[i+20]);
+   }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+30] = new GButton(this, 440, 60 + (i*(height/11)), 100, 50, nameOfStates[i+30]);
+   }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+40] = new GButton(this, 570, 60 + (i*(height/11)), 100, 50, nameOfStates[i+40]);
+   }
+   GButton generalButton = new GButton(this, 700, 60, 100, 50, "General");
+ }
+ 
+ 
  byStateMap = new HashMap<String, ArrayList<StateAtMonth>>();
  stateList = new ArrayList<String>();
   
