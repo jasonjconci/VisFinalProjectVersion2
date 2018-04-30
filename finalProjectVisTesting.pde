@@ -1,5 +1,5 @@
 /*
-* drawMenu function - draws button for all 50 states. When button clicked set current state and launch ...
+* drawMenu function - When button clicked set current state and launch ...
 * drawState function - which draws detailed state shit based on global variable
 * 
 * Make escape go back to main menu
@@ -27,7 +27,6 @@ String[] nameOfStates = {"Alabama", "Alaska", "Arizona", "Arkansas", "California
 "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
 "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
 "Wyoming"};
-//int[] counter = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
 
 
 void handleButtonEvents (GButton button, GEvent event) {
@@ -66,6 +65,7 @@ void setup(){
    longgunList.add(0,longgun);
    otherList.add(0,other);
    
+   //draw all buttons on screen
    for (int i = 0; i < 10; i = i + 1) {
      stateButtons[i] = new GButton(this, 50, 60 + (i*(height/11)), 100, 50, nameOfStates[i]);
    }
