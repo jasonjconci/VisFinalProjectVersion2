@@ -19,6 +19,8 @@ GButton generalButton, backToMain;
 int stateView;
 String currentState;
 
+PFont f;
+
 String[] nameOfStates = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana",
 "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
 "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
@@ -26,6 +28,8 @@ String[] nameOfStates = {"Alabama", "Alaska", "Arizona", "Arkansas", "California
 "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
 "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
 "Wyoming"};
+
+String[] years = {"1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"};
 
 void handleButtonEvents (GButton button, GEvent event) {
    if(event == GEvent.CLICKED){
@@ -35,8 +39,8 @@ void handleButtonEvents (GButton button, GEvent event) {
           stateButtons[i].dispose();
           stateButtons[i] = null;
        }
-       generalButton.dispose();
-       generalButton = null;
+       //generalButton.dispose();
+       //generalButton = null;
        clear();
        background(255, 255, 255);
        backToMain = new GButton(this, (width / 2), 100, 100, 50, "Back To Menu");
@@ -68,7 +72,7 @@ void drawButtons() {
    for (int i = 0; i < 10; i = i + 1) {
      stateButtons[i+40] = new GButton(this, 570, 60 + (i*(height/11)), 100, 50, nameOfStates[i+40]);
    }
-   generalButton = new GButton(this, 700, 60, 100, 50, "General");
+   //generalButton = new GButton(this, 700, 60, 100, 50, "General");
 }
 
 void setup(){
@@ -77,7 +81,7 @@ void setup(){
   background(#ffffff);
   surface.setResizable(true);
   
-  MID_SCREEN = height/2;
+  MID_SCREEN = height / 2;
   stateView = 0;
   
   originalTable = loadTable("nics-firearm-background-checks.csv", "header");
@@ -101,6 +105,8 @@ void setup(){
    handgunList.add(0,handgun);
    longgunList.add(0,longgun);
    otherList.add(0,other);
+   
+   f = createFont("Arial", 16, true);
   }
  
  byStateMap = new HashMap<String, ArrayList<StateAtMonth>>();
@@ -132,6 +138,7 @@ void setup(){
 
 
 void draw(){
+  textFont(f, 28);
   if(stateView == 1) {
     clear();
     background(255, 255, 255);
@@ -156,7 +163,7 @@ void drawStateBarChart(String state) {
   ArrayList<StateAtMonth> currState = byStateMap.get(state);
   int maxValState = Collections.max(currState, new StateComparator()).getTotal();
   double bar_width = ((width - 20) / (currState.size()/15))/15;
-  int scale = ((MID_SCREEN-20)/(maxValState/4)/4);
+  float scale = ((MID_SCREEN-20)/((float)maxValState/4)/4);
 
   for(int i = 0; i < currState.size(); i++) {
     StateAtMonth currMonth = currState.get(i);  
@@ -169,6 +176,7 @@ void drawStateBarChart(String state) {
     //stroke(#000000);
     //line(10 + ((float)bar_width * i), MID_SCREEN - 20 - (float)yTotal, 10 + (float)bar_width + ((float)bar_width * i), MID_SCREEN - 20 - (float)yTotal);
     
+    strokeWeight(1);
     stroke(#ffffff);
     // longgun
     fill(#0000ff);
@@ -187,6 +195,27 @@ void drawStateBarChart(String state) {
     for(int i = (10 + (2 * (int) bar_width)); i < width; i += (bar_width * 12)) {
       line(i, 0, i, height);
     }
+    
+    fill(#000000);
+    text(years[1], (10 + (4 * (int)bar_width)), 50);
+    text(years[2], (10 + (16* (int)bar_width)), 50);
+    text(years[3], (10 + (28 * (int)bar_width)), 50);
+    text(years[4], (10 + (40 * (int)bar_width)), 50);
+    text(years[5], (10 + (52 * (int)bar_width)), 50);
+    text(years[6], (10 + (64 * (int)bar_width)), 50);
+    text(years[7], (10 + (76 * (int)bar_width)), 50);
+    text(years[8], (10 + (88 * (int)bar_width)), 50);
+    text(years[9], (10 + (100 * (int)bar_width)), 50);
+    text(years[10], (10 + (112 * (int)bar_width)), 50);
+    text(years[11], (10 + (124 * (int)bar_width)), 50);
+    text(years[12], (10 + (136 * (int)bar_width)), 50);
+    text(years[13], (10 + (148 * (int)bar_width)), 50);
+    text(years[14], (10 + (160 * (int)bar_width)), 50);
+    text(years[15], (10 + (172 * (int)bar_width)), 50);
+    text(years[16], (10 + (184 * (int)bar_width)), 50);
+    text(years[17], (10 + (196 * (int)bar_width)), 50);
+    text(years[18], (10 + (208 * (int)bar_width)), 50);
+    text(years[19], (10 + (220 * (int)bar_width)), 50);
 }
 
 void drawByState(String state){
@@ -208,7 +237,7 @@ void drawByState(String state){
    double xOther = X_UNIT * (i+1);
    double yOther = Y_UNIT * (maxValState + currMonth.getOther());
    
-   
+   strokeWeight(3);
    stroke(#000000);
    line((float) lastX[0], (float) lastY[0], (float) xTotal, (float) yTotal);
    stroke(#ff0000);
