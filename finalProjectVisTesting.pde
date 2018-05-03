@@ -220,7 +220,7 @@ void drawStateBarChart(String state) {
 
 void drawByState(String state){
   ArrayList<StateAtMonth> currState = byStateMap.get(state);
-  int maxValState = Collections.max(currState, new StateComparator()).getTotal();
+  float maxValState = Collections.max(currState, new StateComparator()).getTotal();
   double X_UNIT = ((width-20) / (currState.size()/15)) / 15;
   double Y_UNIT = (float) ((MID_SCREEN+10) / (maxValState/4))/4;
   double[] lastX = new double[] {10,10,10,10};
