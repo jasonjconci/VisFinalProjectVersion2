@@ -1,10 +1,3 @@
-/*
-* drawMenu function - When button clicked set current state and launch ...
-* drawState function - which draws detailed state shit based on global variable
-* 
-* Make escape go back to main menu
-*
-*/
 import java.util.*;
 import java.lang.*;
 import g4p_controls.*;
@@ -19,7 +12,13 @@ ArrayList<Float> otherList;
 Map<String, ArrayList<StateAtMonth>> byStateMap;
 ArrayList<String> stateList;
 
+int MID_SCREEN;
 GButton[] stateButtons = new GButton[50];
+GButton generalButton, backToMain;
+
+int stateView;
+String currentState;
+
 String[] nameOfStates = {"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana",
 "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
 "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
@@ -28,14 +27,48 @@ String[] nameOfStates = {"Alabama", "Alaska", "Arizona", "Arkansas", "California
 "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin",
 "Wyoming"};
 
-
 void handleButtonEvents (GButton button, GEvent event) {
-   if((button.getText() == "Alabama") && (event == GEvent.CLICKED)){
-       println("Fuck this");
+   if(event == GEvent.CLICKED){
+     if((button.getText() != "Line Chart") && (button.getText() != "Stacked Bar Chart") && (button.getText() != "Back To Menu")) {
+       currentState = button.getText();
+       for(int i = 0; i < 50; i++) {
+          stateButtons[i].dispose();
+          stateButtons[i] = null;
+       }
+       generalButton.dispose();
+       generalButton = null;
+       clear();
+       background(255, 255, 255);
+       backToMain = new GButton(this, (width / 2), 100, 100, 50, "Back To Menu");
+       stateView = 1;
+    }
+  
+    if(button.getText() == "Back To Menu") {
+      backToMain.dispose();
+      backToMain = null;
+      drawButtons();
+      stateView = 0;
+    }
+  }
+}
+
+void drawButtons() {
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i] = new GButton(this, 50, 60 + (i*(height/11)), 100, 50, nameOfStates[i]);
    }
-   else {
-     println("Nothing");
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+10] = new GButton(this, 180, 60 + (i*(height/11)), 100, 50, nameOfStates[i+10]);
    }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+20] = new GButton(this, 310, 60 + (i*(height/11)), 100, 50, nameOfStates[i+20]);
+   }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+30] = new GButton(this, 440, 60 + (i*(height/11)), 100, 50, nameOfStates[i+30]);
+   }
+   for (int i = 0; i < 10; i = i + 1) {
+     stateButtons[i+40] = new GButton(this, 570, 60 + (i*(height/11)), 100, 50, nameOfStates[i+40]);
+   }
+   generalButton = new GButton(this, 700, 60, 100, 50, "General");
 }
 
 void setup(){
@@ -43,6 +76,10 @@ void setup(){
   smooth();
   background(#ffffff);
   surface.setResizable(true);
+  
+  MID_SCREEN = height/2;
+  stateView = 0;
+  
   originalTable = loadTable("nics-firearm-background-checks.csv", "header");
   totalsTable = loadTable("nics_firearm_background_checks_total_by_month.csv", "header");
   
@@ -64,26 +101,7 @@ void setup(){
    handgunList.add(0,handgun);
    longgunList.add(0,longgun);
    otherList.add(0,other);
-   
-   //draw all buttons on screen
-   for (int i = 0; i < 10; i = i + 1) {
-     stateButtons[i] = new GButton(this, 50, 60 + (i*(height/11)), 100, 50, nameOfStates[i]);
-   }
-   for (int i = 0; i < 10; i = i + 1) {
-     stateButtons[i+10] = new GButton(this, 180, 60 + (i*(height/11)), 100, 50, nameOfStates[i+10]);
-   }
-   for (int i = 0; i < 10; i = i + 1) {
-     stateButtons[i+20] = new GButton(this, 310, 60 + (i*(height/11)), 100, 50, nameOfStates[i+20]);
-   }
-   for (int i = 0; i < 10; i = i + 1) {
-     stateButtons[i+30] = new GButton(this, 440, 60 + (i*(height/11)), 100, 50, nameOfStates[i+30]);
-   }
-   for (int i = 0; i < 10; i = i + 1) {
-     stateButtons[i+40] = new GButton(this, 570, 60 + (i*(height/11)), 100, 50, nameOfStates[i+40]);
-   }
-   GButton generalButton = new GButton(this, 700, 60, 100, 50, "General");
- }
- 
+  }
  
  byStateMap = new HashMap<String, ArrayList<StateAtMonth>>();
  stateList = new ArrayList<String>();
@@ -109,56 +127,86 @@ void setup(){
       byStateMap.put(stateName, newList);
     }
   }
-
-  
+  drawButtons();
 }
 
 
 void draw(){
-  //drawByState("California");
-  
-  // Commenting out this bit - I'm guessing, in the future, we'll have a MODE variable, and
-  // depending on the value of this variable, we will draw to the screen a different visualization
-  
-  /*
-  float X_UNIT =  ((width-20) / totalsList.size());
-  float Y_UNIT =  ((height-20) / Collections.max(totalsList));
-  float lastXCoordinate = 10;
-  float lastYCoordinate = (height-10);
-  float max = Collections.max(totalsList);
-  int size = totalsList.size();  
-  for(int i = 0; i < size; i++){
-    float currX = X_UNIT * (1+i);
-    float currY = Y_UNIT * (max - totalsList.get(i));
-    
-    line(lastXCoordinate, lastYCoordinate, currX, currY);
-    
-    lastXCoordinate = currX;
-    lastYCoordinate = currY;
-  }*/
- 
+  if(stateView == 1) {
+    clear();
+    background(255, 255, 255);
+    drawStateView(currentState);
+  }
+  else {
+    clear();
+    background(255, 255, 255);
+  }
 }
 
+void drawStateView(String state) {
+  clear();
+  background(255, 255, 255);
+  
+  drawStateBarChart(state);
+  drawByState(state);
+}
+
+void drawStateBarChart(String state) {
+  rectMode(CORNER);
+  ArrayList<StateAtMonth> currState = byStateMap.get(state);
+  int maxValState = Collections.max(currState, new StateComparator()).getTotal();
+  double bar_width = ((width - 20) / (currState.size()/15))/15;
+  int scale = ((MID_SCREEN-20)/(maxValState/4)/4);
+
+  for(int i = 0; i < currState.size(); i++) {
+    StateAtMonth currMonth = currState.get(i);  
+    float yHandgun = scale * currMonth.getHandgun();
+    float yLonggun = scale * currMonth.getLonggun();
+    float yOther = scale * currMonth.getOther();
+    float yTotal = scale * currMonth.getTotal();
+    
+    // draw total lines
+    //stroke(#000000);
+    //line(10 + ((float)bar_width * i), MID_SCREEN - 20 - (float)yTotal, 10 + (float)bar_width + ((float)bar_width * i), MID_SCREEN - 20 - (float)yTotal);
+    
+    stroke(#ffffff);
+    // longgun
+    fill(#0000ff);
+    rect(10 + ((float)bar_width * i), (MID_SCREEN - 20 - yLonggun), (float)bar_width, yLonggun);
+    
+    // handgun
+    fill(#ff0000);
+    rect(10 + ((float)bar_width * i), (MID_SCREEN - 20 - yLonggun - yHandgun), (float)bar_width, yHandgun);
+    
+    fill(#00ff00);
+    rect(10 + ((float)bar_width * i), (MID_SCREEN - 20 - yLonggun - yHandgun - yOther), (float)bar_width, yOther);
+    }
+    
+    // draw year lines
+    stroke(#000000);
+    for(int i = (10 + (2 * (int) bar_width)); i < width; i += (bar_width * 12)) {
+      line(i, 0, i, height);
+    }
+}
 
 void drawByState(String state){
   ArrayList<StateAtMonth> currState = byStateMap.get(state);
   int maxValState = Collections.max(currState, new StateComparator()).getTotal();
   double X_UNIT = ((width-20) / (currState.size()/15)) / 15;
-  double Y_UNIT = (float) ((height-20) / (maxValState/4))/4;
+  double Y_UNIT = (float) ((MID_SCREEN+10) / (maxValState/4))/4;
   double[] lastX = new double[] {10,10,10,10};
-  double[] lastY = new double[] {height-10,height-10,height-10,height-10};
+  double[] lastY = new double[] {MID_SCREEN+10,MID_SCREEN+10,MID_SCREEN+10,MID_SCREEN+10};
   
   for(int i = 0; i < currState.size(); i++){
    StateAtMonth currMonth = currState.get(i);
-   System.out.println(currMonth); 
    double xTotal = X_UNIT * (i+1);
-   double yTotal = Y_UNIT * (maxValState -  currMonth.getTotal());
+   double yTotal = Y_UNIT * (maxValState +  currMonth.getTotal());
    double xHandgun = X_UNIT * (i+1);
-   double yHandgun = Y_UNIT * (maxValState - currMonth.getHandgun());
+   double yHandgun = Y_UNIT * (maxValState + currMonth.getHandgun());
    double xLonggun = X_UNIT * (i+1);
-   double yLonggun = Y_UNIT * (maxValState - currMonth.getLonggun());
+   double yLonggun = Y_UNIT * (maxValState + currMonth.getLonggun());
    double xOther = X_UNIT * (i+1);
-   double yOther = Y_UNIT * (maxValState - currMonth.getOther());
+   double yOther = Y_UNIT * (maxValState + currMonth.getOther());
    
    
    stroke(#000000);
@@ -167,7 +215,7 @@ void drawByState(String state){
    line((float)lastX[1], (float)lastY[1], (float)xHandgun, (float)yHandgun);
    stroke(#0000ff);
    line((float)lastX[2], (float)lastY[2], (float)xLonggun,  (float)yLonggun);
-   stroke(#00ff00);
+   stroke(#009900);
    line((float)lastX[3], (float)lastY[3],(float) xOther,(float) yOther);
    
    lastX = new double[] {xTotal, xHandgun, xLonggun, xOther};
